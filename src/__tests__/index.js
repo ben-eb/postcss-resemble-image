@@ -3,7 +3,30 @@ import http from 'http';
 import test from 'ava';
 import postcss from 'postcss';
 import getPort from 'get-port';
+import valueParser from 'postcss-value-parser';
 import plugin, {complexGradient, simpleGradient} from '..';
+
+function getArguments (node) {
+    return node.nodes.reduce((list, child) => {
+        if (child.type !== 'div') {
+            list[list.length - 1].push(child);
+        } else {
+            list.push([]);
+        }
+        return list;
+    }, [[]]);
+}
+
+function assertColourStops (t, fixture, expected, options) {
+    return postcss(plugin(options)).process(fixture).then((result) => {
+        valueParser(result.root.first.nodes[0].value).walk(node => {
+            if (node.value !== 'linear-gradient') {
+                return false;
+            }
+            t.deepEqual(getArguments(node).slice(1).length, expected);
+        });
+    });
+}
 
 function processCss (t, fixture, expected, options) {
     return postcss(plugin(options)).process(fixture).then(({css}) => {
@@ -22,10 +45,10 @@ test('should process images from urls', t => {
             fs.createReadStream('./alchemy.jpg').pipe(res);
         }).listen(port);
 
-        return processCss(
+        return assertColourStops(
             t,
             `header{background:resemble-image(url("http://localhost:${port}"), 50%)}`,
-            `header{background:url("http://localhost:${port}"), linear-gradient(90deg, #383532 0%, #373330 50%)}`
+            2
         ).then(() => server.close());
     });
 });
@@ -39,75 +62,75 @@ test(
 
 test(
     'should output a gradient with stops 25% apart (defaults)',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"))}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%)}`
+    4
 );
 
 test(
     'should output a gradient with stops 50% apart',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"), 50%)}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #383532 0%, #373330 50%)}`
+    2
 );
 
 test(
     'should output a gradient with stops 50% apart, with an unquoted url',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url(alchemy.jpg), 50%)}`,
-    `header{background:url(alchemy.jpg), linear-gradient(90deg, #383532 0%, #373330 50%)}`
+    2
 );
 
 test(
     'should output a gradient with stops 50% apart, using the complex generator',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"), 50%)}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #383532 0%, #383532 50%, #373330 50%)}`,
+    3,
     {generator: complexGradient}
 );
 
 test(
     'should output a gradient with stops 50% apart, using the simple generator',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"), 50%)}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #383532 0%, #373330 50%)}`,
+    2,
     {generator: simpleGradient}
 );
 
 test(
     'should output a gradient with stops 100px apart',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"), 100px)}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #312f2d 0%, #353230 10%, #3b3734 20%, #3a3633 30%, #3e3a36 40%, #3e3a36 50%, #393532 60%, #383431 70%, #33302d 80%, #2f2c2a 90%)}`
+    10
 );
 
 test(
     'should output a gradient with stops 100px apart (non-px unit)',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"), 100em)}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #312f2d 0%, #353230 10%, #3b3734 20%, #3a3633 30%, #3e3a36 40%, #3e3a36 50%, #393532 60%, #383431 70%, #33302d 80%, #2f2c2a 90%)}`
+    10
 );
 
 test(
     'should output a gradient with stops 100px apart (no unit)',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"), 100)}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #312f2d 0%, #353230 10%, #3b3734 20%, #3a3633 30%, #3e3a36 40%, #3e3a36 50%, #393532 60%, #383431 70%, #33302d 80%, #2f2c2a 90%)}`
+    10
 );
 
 test(
     'should output a gradient with stops 100px apart (from options)',
-    processCss,
+    assertColourStops,
     `header{background:resemble-image(url("alchemy.jpg"))}`,
-    `header{background:url("alchemy.jpg"), linear-gradient(90deg, #312f2d 0%, #353230 10%, #3b3734 20%, #3a3633 30%, #3e3a36 40%, #3e3a36 50%, #393532 60%, #383431 70%, #33302d 80%, #2f2c2a 90%)}`,
+    10,
     {fidelity: 100}
 );
 
 test(
     'should handle multiple backgrounds',
-    processCss,
+    assertColourStops,
     `header{background:url("foo.jpg"), resemble-image(url("alchemy.jpg"))}`,
-    `header{background:url("foo.jpg"), url("alchemy.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%)}`
+    4
 );
 
 test(
