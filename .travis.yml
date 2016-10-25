@@ -1,21 +1,23 @@
-sudo: false
-
-os:
-  - linux
-  - osx
+sudo: required
 
 language: node_js
 matrix:
   include:
+    - node_js: '6'
+      os: linux
     - node_js: '5'
+      os: linux
     - node_js: '4'
-    - node_js: '0.12'
-      env: NO_ESLINT=true
+      os: linux
+    - node_js: '6'
+      os: osx
+    - node_js: '5'
+      os: osx
+    - node_js: '4'
+      os: osx
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update               ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cairo pango  ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pkg-config libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev; fi
-
-script: "[[ $NO_ESLINT == true ]] && npm run test-012 || npm test"
