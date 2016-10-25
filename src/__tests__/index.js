@@ -6,6 +6,8 @@ import getPort from 'get-port';
 import valueParser from 'postcss-value-parser';
 import plugin, {complexGradient, simpleGradient} from '..';
 
+const image = './../../media/waves.jpg';
+
 function getArguments (node) {
     return node.nodes.reduce((list, child) => {
         if (child.type !== 'div') {
@@ -42,7 +44,7 @@ test('should process images from urls', t => {
     return getPort().then(port => {
         const server = http.createServer((req, res) => {
             res.writeHead(200, {'Content-Type': 'image/jpg'});
-            fs.createReadStream('./alchemy.jpg').pipe(res);
+            fs.createReadStream(image).pipe(res);
         }).listen(port);
 
         return assertColourStops(
@@ -56,35 +58,35 @@ test('should process images from urls', t => {
 test(
     'should pass through when it cannot find a resemble-image function',
     processCss,
-    `header{background:url("alchemy.jpg")}`,
-    `header{background:url("alchemy.jpg")}`
+    `header{background:url("${image}")}`,
+    `header{background:url("${image}")}`
 );
 
 test(
     'should output a gradient with stops 25% apart (defaults)',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"))}`,
+    `header{background:resemble-image(url("${image}"))}`,
     4
 );
 
 test(
     'should output a gradient with stops 50% apart',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"), 50%)}`,
+    `header{background:resemble-image(url("${image}"), 50%)}`,
     2
 );
 
 test(
     'should output a gradient with stops 50% apart, with an unquoted url',
     assertColourStops,
-    `header{background:resemble-image(url(alchemy.jpg), 50%)}`,
+    `header{background:resemble-image(url(${image}), 50%)}`,
     2
 );
 
 test(
     'should output a gradient with stops 50% apart, using the complex generator',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"), 50%)}`,
+    `header{background:resemble-image(url("${image}"), 50%)}`,
     3,
     {generator: complexGradient}
 );
@@ -92,7 +94,7 @@ test(
 test(
     'should output a gradient with stops 50% apart, using the simple generator',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"), 50%)}`,
+    `header{background:resemble-image(url("${image}"), 50%)}`,
     2,
     {generator: simpleGradient}
 );
@@ -100,28 +102,28 @@ test(
 test(
     'should output a gradient with stops 100px apart',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"), 100px)}`,
+    `header{background:resemble-image(url("${image}"), 100px)}`,
     10
 );
 
 test(
     'should output a gradient with stops 100px apart (non-px unit)',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"), 100em)}`,
+    `header{background:resemble-image(url("${image}"), 100em)}`,
     10
 );
 
 test(
     'should output a gradient with stops 100px apart (no unit)',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"), 100)}`,
+    `header{background:resemble-image(url("${image}"), 100)}`,
     10
 );
 
 test(
     'should output a gradient with stops 100px apart (from options)',
     assertColourStops,
-    `header{background:resemble-image(url("alchemy.jpg"))}`,
+    `header{background:resemble-image(url("${image}"))}`,
     10,
     {fidelity: 100}
 );
@@ -129,32 +131,32 @@ test(
 test(
     'should handle multiple backgrounds',
     assertColourStops,
-    `header{background:url("foo.jpg"), resemble-image(url("alchemy.jpg"))}`,
+    `header{background:url("foo.jpg"), resemble-image(url("${image}"))}`,
     4
 );
 
 test(
     'should error on 0',
     shouldThrow,
-    `header{background:resemble-image(url("alchemy.jpg"), 0)}`
+    `header{background:resemble-image(url("${image}"), 0)}`
 );
 
 test(
     'should error on 0, when set from options',
     shouldThrow,
-    `header{background:resemble-image(url("alchemy.jpg"))}`,
+    `header{background:resemble-image(url("${image}"))}`,
     {fidelity: 0}
 );
 
 test(
     'should error on 0, when set from options (string)',
     shouldThrow,
-    `header{background:resemble-image(url("alchemy.jpg"))}`,
+    `header{background:resemble-image(url("${image}"))}`,
     {fidelity: '0'}
 );
 
 test(
     'should error on invalid fidelity',
     shouldThrow,
-    `header{background:resemble-image(url("alchemy.jpg"), twenty-five)}`
+    `header{background:resemble-image(url("${image}"), twenty-five)}`
 );

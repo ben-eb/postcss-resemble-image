@@ -74,6 +74,21 @@ header {
 ```
 
 
+## Screenshots
+
+Original image:
+
+<img width="1000" src="https://rawgit.com/ben-eb/cssnano/master/media/waves.jpg">
+
+After processing (using `simpleGradient`, with 25% stops):
+
+<img width="1000" src="https://rawgit.com/ben-eb/cssnano/master/media/simple.png">
+
+After processing (using `complexGradient`, with 5% stops):
+
+<img width="1000" src="https://rawgit.com/ben-eb/cssnano/master/media/complex.png">
+
+
 ## API
 
 ### `resembleImage([options])`
