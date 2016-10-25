@@ -8,4 +8,8 @@ matrix:
     - node_js: '0.12'
       env: NO_ESLINT=true
 
+before_install:
+  - brew update
+  - brew install cairo pango
+
 script: "[[ $NO_ESLINT == true ]] && npm run test-012 || npm test"
