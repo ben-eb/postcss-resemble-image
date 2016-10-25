@@ -1,0 +1,93 @@
+{
+  "name": "postcss-resemble-image",
+  "version": "0.0.0",
+  "description": "Provide a gradient fallback for an image that loosely resembles the original.",
+  "main": "dist/index.js",
+  "scripts": {
+    "contributorAdd": "all-contributors add",
+    "contributorGenerate": "all-contributors generate",
+    "pretest": "eslint src",
+    "prepublish": "del-cli dist && cross-env BABEL_ENV=publish babel src --out-dir dist --ignore /__tests__/",
+    "report": "nyc report --reporter=html",
+    "test": "cross-env BABEL_ENV=test BABEL_DISABLE_CACHE=1 nyc --check-coverage --lines 100 ava",
+    "test-012": "cross-env BABEL_ENV=test BABEL_DISABLE_CACHE=1 nyc --check-coverage --lines 100 ava"
+  },
+  "files": [
+    "dist",
+    "LICENSE-MIT"
+  ],
+  "keywords": [
+    "css",
+    "fallback",
+    "images",
+    "performance",
+    "postcss",
+    "postcss-plugin"
+  ],
+  "homepage": "https://github.com/ben-eb/postcss-resemble-image",
+  "author": {
+    "name": "Ben Briggs",
+    "email": "beneb.info@gmail.com",
+    "url": "http://beneb.info"
+  },
+  "repository": "ben-eb/postcss-resemble-image",
+  "license": "MIT",
+  "dependencies": {
+    "asset-resolver": "^0.3.0",
+    "image-size": "^0.5.0",
+    "paper": "^0.10.2",
+    "postcss": "^5.2.5",
+    "postcss-value-parser": "^3.3.0"
+  },
+  "devDependencies": {
+    "all-contributors-cli": "^3.0.6",
+    "ava": "^0.15.0",
+    "babel-cli": "^6.5.1",
+    "babel-core": "^6.5.1",
+    "babel-plugin-istanbul": "^1.0.3",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "cross-env": "^1.0.7",
+    "del-cli": "^0.2.0",
+    "eslint": "^3.0.0",
+    "eslint-config-cssnano": "^3.0.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-import": "^1.12.0",
+    "get-port": "^2.1.0",
+    "nyc": "^7.1.0-candidate2"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "**/__tests__"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
+  "ava": {
+    "babel": "inherit",
+    "require": "babel-register"
+  },
+  "eslintConfig": {
+    "extends": "cssnano"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ],
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      },
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  }
+}

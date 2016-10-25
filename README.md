@@ -1,0 +1,170 @@
+# [postcss][postcss]-resemble-image [![Build Status](https://travis-ci.org/ben-eb/postcss-resemble-image.svg?branch=master)][ci] [![NPM version](https://badge.fury.io/js/postcss-resemble-image.svg)][npm] [![Dependency Status](https://gemnasium.com/ben-eb/postcss-resemble-image.svg)][deps]
+
+> Provide a gradient fallback for an image that loosely resembles the original.
+
+
+## Install
+
+With [npm](https://npmjs.org/package/postcss-resemble-image) do:
+
+```
+npm install postcss-resemble-image --save
+```
+
+postcss-resemble-image uses paper.js to perform the image analysis, and this
+requires that the Cairo graphics library is installed on your machine. To do
+this, please see the [paper.js installation guide][1].
+
+[1]: https://github.com/paperjs/paper.js#installing-paperjs-for-nodejs-through-npm
+
+
+## Example
+
+This module will add a background gradient fallback for images, should the
+resource fail to load; the image fallback loosely resembles the original. The
+idea for this module was inspired by [Harry Roberts' article][2].
+
+[2]: http://csswizardry.com/2016/10/improving-perceived-performance-with-multiple-background-images/
+
+### Defaults
+
+The image will be loaded relative to the CSS file; in these examples, `"alchemy.jpg"`
+is in the same directory as the CSS. Note that this module can also load images
+from a URL.
+
+#### Input
+
+```css
+header {
+    background: resemble-image(url("alchemy.jpg"));
+}
+```
+
+#### Output
+
+```css
+header {
+    background: url("alchemy.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%);
+}
+```
+
+### Passing percentages
+
+`fidelity` is set globally, but can also be passed as the second parameter to the
+`resemble-image` function. This code will generate a colour stop for each tenth
+of the image.
+
+```css
+header {
+    background: resemble-image(url("alchemy.jpg"), 10%);
+}
+```
+
+### Passing absolute lengths
+
+`fidelity` can also be set via a *pixel* value. Anything other than `%` will be
+parsed as a `px` value, including no unit; these are equivalent:
+
+```css
+header {
+    background: resemble-image(url("alchemy.jpg"), 10px);
+    background: resemble-image(url("alchemy.jpg"), 10em);
+    background: resemble-image(url("alchemy.jpg"), 10);
+}
+```
+
+
+## API
+
+### `resembleImage([options])`
+
+Note that postcss-resemble-image is an *asynchronous* processor. It cannot be
+used like this:
+
+```js
+import postcss from 'postcss';
+import resembleImage from 'postcss-resemble-image';
+
+const result = postcss([ resembleImage() ]).process(css).css;
+console.log(result);
+```
+
+Instead make sure your PostCSS runner uses the asynchronous API:
+
+```js
+import postcss from 'postcss';
+import resembleImage from 'postcss-resemble-image';
+
+postcss([ resembleImage() ]).process(css).then((result) => {
+    console.log(result.css);
+});
+```
+
+postcss-resemble-image is designed to be used with `import` & `export`. When
+using `require`, make sure that you load the main module by doing:
+
+```js
+const resembleImage = require('postcss-resemble-image').default;
+```
+
+#### options
+
+##### fidelity
+
+Type: `number|string`  
+Default: `25%`  
+
+The `fidelity` option controls how many colour stops will be generated for the
+linear gradient fallback. By default, it will be split into quarters. Setting
+this to anything other than `%` will be parsed as a `px` value, including
+no unit. Zero values are not allowed.
+
+##### generator
+
+Type: `function`  
+Default: `simpleGradient`  
+
+The `generator` option controls the rendering of the gradient function; by
+default it is set to `simpleGradient` which will smoothly transition between
+the gradient stops. The `complexGradient` function hard transitions between each
+colour, for a striped effect. To use this instead you may import the function
+from the module, like so:
+
+```js
+import postcss from 'postcss';
+import resembleImage, {complexGradient} from 'postcss-resemble-image';
+
+postcss([ resembleImage({generator: complexGradient}) ]).process(css).then((result) => {
+    console.log(result.css);
+});
+```
+
+## Usage
+
+See the [PostCSS documentation](https://github.com/postcss/postcss#usage) for
+examples for your environment.
+
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars.githubusercontent.com/u/1282980?v=3" width="100px;"/><br /><sub>Ben Briggs</sub>](http://beneb.info)<br />[💻](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) [📖](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) 👀 [⚠️](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors] specification. Contributions of
+any kind welcome!
+
+
+## License
+
+MIT © [Ben Briggs](http://beneb.info)
+
+
+[all-contributors]: https://github.com/kentcdodds/all-contributors
+[ci]:      https://travis-ci.org/ben-eb/postcss-resemble-image
+[deps]:    https://gemnasium.com/ben-eb/postcss-resemble-image
+[npm]:     http://badge.fury.io/js/postcss-resemble-image
+[postcss]: https://github.com/postcss/postcss
