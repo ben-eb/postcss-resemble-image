@@ -1,5 +1,17 @@
 sudo: required
 
+addons:
+  apt:
+    packages:
+      - build-essential
+      - g++-4.9
+      - libcairo2-dev
+      - libpango1.0-dev
+      - libssl-dev
+      - libjpeg62-dev
+      - libgif-dev
+      - pkg-config
+
 language: node_js
 matrix:
   include:
@@ -25,6 +37,4 @@ matrix:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update               ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cairo pango  ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pkg-config libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev build-essential g++-4.9; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm install canvas      ; fi
