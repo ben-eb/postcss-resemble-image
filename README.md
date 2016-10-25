@@ -78,16 +78,17 @@ header {
 
 Original image:
 
-<img width="1000" src="https://rawgit.com/ben-eb/cssnano/master/media/waves.jpg">
+<img width="1000" src="https://rawgit.com/ben-eb/postcss-resemble-image/master/media/waves.jpg">
 
 After processing (using `simpleGradient`, with 25% stops):
 
-<img width="1000" src="https://rawgit.com/ben-eb/cssnano/master/media/simple.png">
+<img width="1000" src="https://rawgit.com/ben-eb/postcss-resemble-image/master/media/simple.png">
 
 After processing (using `complexGradient`, with 5% stops):
 
-<img width="1000" src="https://rawgit.com/ben-eb/cssnano/master/media/complex.png">
+<img width="1000" src="https://rawgit.com/ben-eb/postcss-resemble-image/master/media/complex.png">
 
+Image credit: https://unsplash.com/?photo=9EM7s13H2I0
 
 ## API
 
