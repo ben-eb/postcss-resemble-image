@@ -1,5 +1,9 @@
 sudo: false
 
+os:
+  - linux
+  - osx
+
 language: node_js
 matrix:
   include:
@@ -9,7 +13,9 @@ matrix:
       env: NO_ESLINT=true
 
 before_install:
-  - brew update
-  - brew install cairo pango
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update               ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cairo pango  ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y pkg-config libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev; fi
 
 script: "[[ $NO_ESLINT == true ]] && npm run test-012 || npm test"
