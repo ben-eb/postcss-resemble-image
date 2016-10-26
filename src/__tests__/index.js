@@ -6,7 +6,7 @@ import getPort from 'get-port';
 import valueParser from 'postcss-value-parser';
 import plugin, {complexGradient, simpleGradient} from '..';
 
-const image = './../../media/waves.jpg';
+const image = './../../docs/waves.jpg';
 
 function getArguments (node) {
     return node.nodes.reduce((list, child) => {
