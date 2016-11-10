@@ -7,6 +7,7 @@ import valueParser from 'postcss-value-parser';
 import plugin, {complexGradient, simpleGradient} from '..';
 
 const image = './../../docs/waves.jpg';
+const unprocessable = './../../docs/index.html';
 
 function getArguments (node) {
     return node.nodes.reduce((list, child) => {
@@ -159,4 +160,16 @@ test(
     'should error on invalid fidelity',
     shouldThrow,
     `header{background:resemble-image(url("${image}"), twenty-five)}`
+);
+
+test(
+    'should error on non-existing image',
+    shouldThrow,
+    `header{background:resemble-image(url(), twenty-five)}`
+);
+
+test(
+    'should error on unprocessable image',
+    shouldThrow,
+    `header{background:resemble-image(url("${unprocessable}"), twenty-five)}`
 );

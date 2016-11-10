@@ -44,19 +44,20 @@ export default function resembleImage (path, {generator, fidelity}) {
             if (err) {
                 reject(err);
             }
-            const width = image.bitmap.width;
-            const height = image.bitmap.height;
-            const stops = [];
-            const colourStop = colourStopFactory(width);
+            let width;
+            let height;
             let chunk;
-            let color;
             try {
+                width = image.bitmap.width;
+                height = image.bitmap.height;
                 chunk = resolveFidelity(width, fidelity);
             } catch (e) {
                 return reject(e);
             }
+            const stops = [];
+            const colourStop = colourStopFactory(width);
             for (let i = 0; i < width; i += chunk) {
-                color = image.clone()
+                let color = image.clone()
                     .crop(i, 0, chunk, height)
                     .resize(1, 1, Jimp.RESIZE_BICUBIC)
                     .getPixelColor(0, 0);
