@@ -1,28 +1,15 @@
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - build-essential
-      - g++-4.9
 language: node_js
 matrix:
   include:
-    - env: CXX=g++-4.9
-      node_js: '6'
+    - node_js: '6'
       os: linux
-    - env: CXX=g++-4.9
-      node_js: '5'
+    - node_js: '5'
       os: linux
-    - env: CXX=g++-4.9
-      node_js: '4'
+    - node_js: '4'
       os: linux
-    - env: CXX=g++-4.9
-      node_js: '6'
+    - node_js: '6'
       os: osx
-    - env: CXX=g++-4.9
-      node_js: '5'
+    - node_js: '5'
       os: osx
-    - env: CXX=g++-4.9
-      node_js: '4'
+    - node_js: '4'
       os: osx
