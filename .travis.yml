@@ -1,5 +1,3 @@
-sudo: required
-
 addons:
   apt:
     sources:
@@ -7,9 +5,6 @@ addons:
     packages:
       - build-essential
       - g++-4.9
-      - libssl-dev
-      - libjpeg62-dev
-      - libgif-dev
       - pkg-config
 
 language: node_js
