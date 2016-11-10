@@ -1,6 +1,4 @@
-import resolver from 'asset-resolver';
-import paper from 'paper';
-import imageSize from 'image-size';
+import Jimp from 'jimp';
 
 function scaleValue (value, min, max) {
     const newMin = 0;
@@ -32,36 +30,40 @@ function resolveFidelity (width, pair) {
     return number;
 }
 
-export default function resembleImage (image, {generator, fidelity}) {
-    return resolver.getResource(image).then(data => data.contents)
-    .then(imageSize).then(({width, height}) => {
-        return new Promise((resolve, reject) => {
-            paper.setup(new paper.Size(width, height));
-            const raster = new paper.Raster(image);
+function rgbToHex ({r, g, b}) {
+    function convert (c) {
+        const hex = c.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }
+    return convert(r) + convert(g) + convert(b);
+}
+
+export default function resembleImage (path, {generator, fidelity}) {
+    return new Promise((resolve, reject) => {
+        Jimp.read(path, (err, image) => {
+            if (err) {
+                reject(err);
+            }
+            const width = image.bitmap.width;
+            const height = image.bitmap.height;
+            const stops = [];
             const colourStop = colourStopFactory(width);
-
-            raster.onLoad = function () {
-                const stops = [];
-                raster.position = paper.view.center;
-                let chunk;
-                try {
-                    chunk = resolveFidelity(width, fidelity);
-                } catch (e) {
-                    return reject(e);
-                }
-
-                for (let i = 0; i < width; i += chunk) {
-                    const rect = new paper.Path.Rectangle(
-                        i,
-                        0,
-                        chunk,
-                        height
-                    );
-                    stops.push(colourStop(raster.getAverageColor(rect).toCSS(true), i));
-                }
-
-                return resolve(generator(stops));
-            };
+            let chunk;
+            let color;
+            try {
+                chunk = resolveFidelity(width, fidelity);
+            } catch (e) {
+                return reject(e);
+            }
+            for (let i = 0; i < width; i += chunk) {
+                color = image.clone()
+                    .crop(i, 0, chunk, height)
+                    .resize(1, 1, Jimp.RESIZE_BICUBIC)
+                    .getPixelColor(0, 0);
+                color = rgbToHex(Jimp.intToRGBA(color));
+                stops.push(colourStop(color, i));
+            }
+            return resolve(generator(stops));
         });
     });
 }
