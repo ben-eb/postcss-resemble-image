@@ -11,11 +11,14 @@ With [npm](https://npmjs.org/package/postcss-resemble-image) do:
 npm install postcss-resemble-image --save
 ```
 
-postcss-resemble-image uses paper.js to perform the image analysis, and this
-requires that the Cairo graphics library is installed on your machine. To do
-this, please see the [paper.js installation guide][1].
+postcss-resemble-image uses [Jimp] to perform the image analysis. The following
+image formats are supported:
 
-[1]: https://github.com/paperjs/paper.js#installing-paperjs-for-nodejs-through-npm
+* `BMP`
+* `JPEG`
+* `PNG`
+
+[Jimp]: https://github.com/oliver-moran/jimp
 
 
 ## Example
@@ -166,8 +169,8 @@ examples for your environment.
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars.githubusercontent.com/u/1282980?v=3" width="100px;"/><br /><sub>Ben Briggs</sub>](http://beneb.info)<br />[💻](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) [📖](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) 👀 [⚠️](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) |
-| :---: |
+| [<img src="https://avatars.githubusercontent.com/u/1282980?v=3" width="100px;"/><br /><sub>Ben Briggs</sub>](http://beneb.info)<br />[💻](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) [📖](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) 👀 [⚠️](https://github.com/ben-eb/postcss-resemble-image/commits?author=ben-eb) | [<img src="https://avatars.githubusercontent.com/u/2143782?v=3" width="100px;"/><br /><sub>Manuel Wieser</sub>](https://manu.ninja)<br />[💻](https://github.com/ben-eb/postcss-resemble-image/commits?author=Lorti) [⚠️](https://github.com/ben-eb/postcss-resemble-image/commits?author=Lorti) |
+| :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors] specification. Contributions of

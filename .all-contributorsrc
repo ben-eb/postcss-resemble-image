@@ -18,6 +18,16 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "Lorti",
+      "name": "Manuel Wieser",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2143782?v=3",
+      "profile": "https://manu.ninja",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ]
 }
