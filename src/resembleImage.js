@@ -35,7 +35,7 @@ function rgbToHex ({r, g, b}) {
         const hex = c.toString(16);
         return hex.length === 1 ? '0' + hex : hex;
     }
-    return convert(r) + convert(g) + convert(b);
+    return '#' + convert(r) + convert(g) + convert(b);
 }
 
 export default function resembleImage (path, {generator, fidelity}) {

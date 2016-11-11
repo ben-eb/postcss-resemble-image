@@ -26,7 +26,12 @@ function assertColourStops (t, fixture, expected, options) {
             if (node.value !== 'linear-gradient') {
                 return false;
             }
-            t.deepEqual(getArguments(node).slice(1).length, expected);
+            const stops = getArguments(node).slice(1);
+            t.deepEqual(stops.length, expected);
+            stops.forEach(stop => {
+                const colour = stop[0].value;
+                t.truthy(/^#[0-9a-f]{6}$/i.test(colour));
+            });
         });
     });
 }
