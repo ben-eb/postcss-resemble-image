@@ -171,5 +171,5 @@ test(
 test(
     'should error on unprocessable image',
     shouldThrow,
-    `header{background:resemble-image(url("${unprocessable}"), twenty-five)}`
+    `header{background:resemble-image(url("${unprocessable}"))}`
 );
