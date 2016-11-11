@@ -7,6 +7,7 @@ import valueParser from 'postcss-value-parser';
 import plugin, {complexGradient, simpleGradient} from '..';
 
 const image = './../../docs/waves.jpg';
+const unprocessable = './../../docs/index.html';
 
 function getArguments (node) {
     return node.nodes.reduce((list, child) => {
@@ -25,7 +26,12 @@ function assertColourStops (t, fixture, expected, options) {
             if (node.value !== 'linear-gradient') {
                 return false;
             }
-            t.deepEqual(getArguments(node).slice(1).length, expected);
+            const stops = getArguments(node).slice(1);
+            t.deepEqual(stops.length, expected);
+            stops.forEach(stop => {
+                const colour = stop[0].value;
+                t.truthy(/^#[0-9a-f]{6}$/i.test(colour));
+            });
         });
     });
 }
@@ -159,4 +165,16 @@ test(
     'should error on invalid fidelity',
     shouldThrow,
     `header{background:resemble-image(url("${image}"), twenty-five)}`
+);
+
+test(
+    'should error on non-existing image',
+    shouldThrow,
+    `header{background:resemble-image(url(), twenty-five)}`
+);
+
+test(
+    'should error on unprocessable image',
+    shouldThrow,
+    `header{background:resemble-image(url("${unprocessable}"))}`
 );

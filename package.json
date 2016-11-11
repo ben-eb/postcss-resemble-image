@@ -35,9 +35,7 @@
   "repository": "ben-eb/postcss-resemble-image",
   "license": "MIT",
   "dependencies": {
-    "asset-resolver": "^0.3.0",
-    "image-size": "^0.5.0",
-    "paper": "^0.10.2",
+    "jimp": "^0.2.27",
     "postcss": "^5.2.5",
     "postcss-value-parser": "^3.3.0"
   },

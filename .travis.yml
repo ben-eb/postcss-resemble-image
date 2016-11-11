@@ -1,42 +1,14 @@
-sudo: required
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - build-essential
-      - g++-4.9
-      - libcairo2-dev
-      - libpango1.0-dev
-      - libssl-dev
-      - libjpeg62-dev
-      - libgif-dev
-      - pkg-config
-
+sudo: false
 language: node_js
 matrix:
   include:
-    - env: CXX=g++-4.9
-      node_js: '6'
+    - node_js: '6'
       os: linux
-    - env: CXX=g++-4.9
-      node_js: '5'
+    - node_js: '5'
       os: linux
-    - env: CXX=g++-4.9
-      node_js: '4'
+    - node_js: '4'
       os: linux
-    - env: CXX=g++-4.9
-      node_js: '6'
+    - node_js: '6'
       os: osx
-    - env: CXX=g++-4.9
-      node_js: '5'
+    - node_js: '5'
       os: osx
-    - env: CXX=g++-4.9
-      node_js: '4'
-      os: osx
-
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update               ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cairo pango  ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm install canvas      ; fi
