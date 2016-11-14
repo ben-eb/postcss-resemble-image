@@ -1,4 +1,4 @@
-# [postcss][postcss]-resemble-image [![Build Status](https://travis-ci.org/ben-eb/postcss-resemble-image.svg?branch=master)][ci] [![NPM version](https://badge.fury.io/js/postcss-resemble-image.svg)][npm] [![Dependency Status](https://gemnasium.com/ben-eb/postcss-resemble-image.svg)][deps]
+# [postcss][postcss]-resemble-image [![Build Status](https://travis-ci.org/ben-eb/postcss-resemble-image.svg?branch=master)][ci] [![Build status](https://ci.appveyor.com/api/projects/status/396xfduj47prxklq?svg=true)](https://ci.appveyor.com/project/ben-eb/postcss-resemble-image) [![NPM version](https://badge.fury.io/js/postcss-resemble-image.svg)][npm] [![Dependency Status](https://gemnasium.com/ben-eb/postcss-resemble-image.svg)][deps]
 
 > Provide a gradient fallback for an image that loosely resembles the original.
 
