@@ -22,10 +22,12 @@ function getArguments (node) {
 
 function assertColourStops (t, fixture, expected, options) {
     return postcss(plugin(options)).process(fixture).then((result) => {
+        let hasGradient = false;
         valueParser(result.root.first.nodes[0].value).walk(node => {
             if (node.value !== 'linear-gradient') {
                 return false;
             }
+            hasGradient = true;
             const stops = getArguments(node).slice(1);
             t.deepEqual(stops.length, expected);
             stops.forEach(stop => {
@@ -33,6 +35,7 @@ function assertColourStops (t, fixture, expected, options) {
                 t.truthy(/^#[0-9a-f]{6}$/i.test(colour));
             });
         });
+        t.truthy(hasGradient);
     });
 }
 
@@ -66,6 +69,14 @@ test(
     processCss,
     `header{background:url("${image}")}`,
     `header{background:url("${image}")}`
+);
+
+test(
+    'should output a gradient for specified selectors',
+    assertColourStops,
+    `header, footer{background:url("${image}")}`,
+    4,
+    {selectors: ['header']}
 );
 
 test(

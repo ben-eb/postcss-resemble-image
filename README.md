@@ -29,17 +29,31 @@ idea for this module was inspired by [Harry Roberts' article][2].
 
 [2]: http://csswizardry.com/2016/10/improving-perceived-performance-with-multiple-background-images/
 
-### Defaults
-
-The image will be loaded relative to the CSS file; in these examples, `"alchemy.jpg"`
+Each image will be loaded relative to the CSS file; in these examples, `"waves.jpg"`
 is in the same directory as the CSS. Note that this module can also load images
 from a URL.
+
+There are two ways to use postcss-resemble-image; the first allows you to
+automatically render these gradients by providing a list of selectors
+to analyse for images. The second allows you to use a non-standard function,
+`resemble-image`, which takes a CSS URL as the first parameter and the
+*fidelity* as the second. You may use these interchangeably if you so wish.
+
+### Using the automatic render
+
+#### Options
+
+```js
+{
+    selectors: ['header']
+}
+```
 
 #### Input
 
 ```css
 header {
-    background: resemble-image(url("alchemy.jpg"));
+    background: url("waves.jpg");
 }
 ```
 
@@ -47,11 +61,31 @@ header {
 
 ```css
 header {
-    background: url("alchemy.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%);
+    background: url("waves.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%);
 }
 ```
 
-### Passing percentages
+### Using the `resemble-image` function
+
+#### Defaults
+
+##### Input
+
+```css
+header {
+    background: resemble-image(url("waves.jpg"));
+}
+```
+
+##### Output
+
+```css
+header {
+    background: url("waves.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%);
+}
+```
+
+#### Passing percentages
 
 `fidelity` is set globally, but can also be passed as the second parameter to the
 `resemble-image` function. This code will generate a colour stop for each tenth
@@ -59,20 +93,20 @@ of the image.
 
 ```css
 header {
-    background: resemble-image(url("alchemy.jpg"), 10%);
+    background: resemble-image(url("waves.jpg"), 10%);
 }
 ```
 
-### Passing absolute lengths
+#### Passing absolute lengths
 
 `fidelity` can also be set via a *pixel* value. Anything other than `%` will be
 parsed as a `px` value, including no unit; these are equivalent:
 
 ```css
 header {
-    background: resemble-image(url("alchemy.jpg"), 10px);
-    background: resemble-image(url("alchemy.jpg"), 10em);
-    background: resemble-image(url("alchemy.jpg"), 10);
+    background: resemble-image(url("waves.jpg"), 10px);
+    background: resemble-image(url("waves.jpg"), 10em);
+    background: resemble-image(url("waves.jpg"), 10);
 }
 ```
 
@@ -157,6 +191,36 @@ postcss([ resembleImage({generator: complexGradient}) ]).process(css).then((resu
     console.log(result.css);
 });
 ```
+
+##### selectors
+
+Type: `array`  
+Default: `[]`  
+
+The `selectors` array controls which selectors postcss-resemble-image should
+analyse for URLs to provide gradients for. The module tests using strict
+equality; if you are checking a selector which contains more than one simple
+selector only one of these needs to be specified. For example:
+
+```js
+import postcss from 'postcss';
+import resembleImage from 'postcss-resemble-image';
+
+const css = `
+header, footer {
+    background: url("waves.jpg");
+}
+`;
+
+postcss([ resembleImage({selectors: ['footer']}) ]).process(css).then((result) => {
+    console.log(result.css);
+    // => header, footer {
+    //        background: url("waves.jpg"), linear-gradient(90deg, #353230 0%, #3c3835 25%, #3b3734 50%, #322f2c 75%);
+    //    }
+});
+```
+
+Note that this option isn't required when using the `resemble-image` function.
 
 ## Usage
 
