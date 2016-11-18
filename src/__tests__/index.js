@@ -185,7 +185,23 @@ test(
 );
 
 test(
-    'should error on unprocessable image',
+    'simple algorithm should error on unprocessable image',
     shouldThrow,
     `header{background:resemble-image(url("${unprocessable}"))}`
+);
+
+test(
+    'improved algorithm should error on unprocessable image',
+    shouldThrow,
+    `header{background:resemble-image(url("${unprocessable}"))}`,
+    {improvedAlgorithm: true}
+);
+
+
+test(
+    'should use the improved algorithm if needed',
+    assertColourStops,
+    `header{background:resemble-image(url("${image}"))}`,
+    4,
+    {improvedAlgorithm: true}
 );

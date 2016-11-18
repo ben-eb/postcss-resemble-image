@@ -1,6 +1,6 @@
 import {plugin} from 'postcss';
 import valueParser, {stringify, unit} from 'postcss-value-parser';
-import resembleImage from './resembleImage';
+import {resembleImage, improvedResembleImage} from './resembleImage';
 import simpleGradient from './simpleGradient';
 
 const resembleFunction = 'resemble-image';
@@ -36,8 +36,9 @@ function resemblePromise (decl, opts, wrapped = true) {
         }
         const second = node.nodes[2];
         const fidelity = unit(second && second.value || opts.fidelity.toString());
+        const algorithm = opts.improvedAlgorithm ? improvedResembleImage : resembleImage;
         promises.push(
-            resembleImage(
+            algorithm(
                 url,
                 {
                     ...opts,
