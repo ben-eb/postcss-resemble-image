@@ -79,17 +79,18 @@ export function resembleImage (path, {generator, fidelity}) {
             const stops = [];
             const colourStop = colourStopFactory(width);
             for (let i = 0; i < width; i += chunk) {
-                let color = image.clone()
+                let colour = image.clone()
                     .crop(i, 0, chunk, height)
                     .resize(1, 1, Jimp.RESIZE_BICUBIC)
                     .getPixelColor(0, 0);
-                color = rgbToHex(Jimp.intToRGBA(color));
-                stops.push(colourStop(color, i));
+                colour = rgbToHex(Jimp.intToRGBA(colour));
+                stops.push(colourStop(colour, i));
             }
             return resolve(generator(stops));
         });
     });
 }
+
 export function improvedResembleImage (path, {generator}) {
     return new Promise((resolve, reject) => {
         Jimp.read(path, (err, image) => {
