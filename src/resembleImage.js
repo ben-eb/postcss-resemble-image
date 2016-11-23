@@ -101,7 +101,7 @@ export function improvedResembleImage (path, {generator}) {
             let strip;
 
             try {
-                strip = image.clone().resize(256, 3, Jimp.RESIZE_BICUBIC);
+                strip = image.clone().resize(256, 4, Jimp.RESIZE_BICUBIC);
             } catch (e) {
                 return reject(e);
             }
@@ -123,11 +123,13 @@ export function improvedResembleImage (path, {generator}) {
                 this.bitmap.data[idx + 2] = palette[colourIndex * 3 + 2];
             });
 
+            strip.resize(256, 1, Jimp.RESIZE_BICUBIC);
+
             const groups = [];
             let previous = '#';
 
             for (let x = 0; x < strip.bitmap.width; x++) {
-                const colour = rgbToHex(Jimp.intToRGBA(strip.getPixelColor(x, 1)));
+                const colour = rgbToHex(Jimp.intToRGBA(strip.getPixelColor(x, 0)));
                 if (colour !== previous) {
                     groups.push({
                         colour: colour,
