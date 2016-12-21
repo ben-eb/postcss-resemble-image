@@ -25,9 +25,7 @@ image formats are supported:
 
 This module will add a background gradient fallback for images, should the
 resource fail to load; the image fallback loosely resembles the original. The
-idea for this module was inspired by [Harry Roberts' article][2].
-
-[2]: http://csswizardry.com/2016/10/improving-perceived-performance-with-multiple-background-images/
+idea for this module was inspired by [Harry Roberts' article][csswizardry].
 
 Each image will be loaded relative to the CSS file; in these examples, `"waves.jpg"`
 is in the same directory as the CSS. Note that this module can also load images
@@ -239,6 +237,14 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 This project follows the [all-contributors] specification. Contributions of
 any kind welcome!
+
+
+## Resources
+
+* [Harry Roberts' original article][csswizardry].
+* [Manuel Wieser's resemble image blog post](https://manu.ninja/thoughts-on-linear-gradients-that-resemble-images).
+
+[csswizardry]: http://csswizardry.com/2016/10/improving-perceived-performance-with-multiple-background-images/
 
 
 ## License
