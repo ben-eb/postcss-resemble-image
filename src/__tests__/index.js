@@ -39,6 +39,12 @@ function assertColourStops (t, fixture, expected, options) {
     });
 }
 
+function shouldNotHaveFunctionInOutput (t, fixture, expected, options) {
+    return postcss(plugin(options)).process(fixture).then((result) => {
+        t.is(result.root.first.nodes[0].value.indexOf('resemble-image'), -1);
+    });
+}
+
 function processCss (t, fixture, expected, options) {
     return postcss(plugin(options)).process(fixture).then(({css}) => {
         t.deepEqual(css, expected);
@@ -77,6 +83,13 @@ test(
     `header, footer{background:url("${image}")}`,
     4,
     {selectors: ['header']}
+);
+
+test(
+    'should output a value without the resemble-image() function wrapped around',
+    shouldNotHaveFunctionInOutput,
+    `header{background:resemble-image(url("${image}"))}`,
+    4
 );
 
 test(
@@ -149,6 +162,12 @@ test(
     'should handle multiple backgrounds',
     assertColourStops,
     `header{background:url("foo.jpg"), resemble-image(url("${image}"))}`,
+    4
+);
+
+test('should handle background value shorthand',
+    assertColourStops,
+    `header{background:resemble-image(url("${image}")) no-repeat center / cover}`,
     4
 );
 

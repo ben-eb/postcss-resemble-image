@@ -18,7 +18,7 @@ function resemblePromise (decl, opts, wrapped = true) {
     let url;
     let toString;
 
-    decl.value = valueParser(decl.value).walk(node => {
+    decl.value = valueParser(decl.value).walk((node, index, nodes) => {
         const {type, value} = node;
         if (type !== 'function') {
             return false;
@@ -44,8 +44,16 @@ function resemblePromise (decl, opts, wrapped = true) {
                     fidelity,
                 }
             ).then(gradient => {
-                node.value = stringify(toString) + ', ' + gradient;
+                // Remove the resemble-image function wrapper if there is any
+                node.value = stringify(toString);
                 node.type = 'word';
+
+                // Add the gradient at the end of the value
+                nodes.push({
+                    type: 'word',
+                    value: `, ${gradient}`,
+                    after: true,
+                });
             })
         );
         return false;
