@@ -171,6 +171,15 @@ test('should handle background value shorthand',
     4
 );
 
+test('should handle background value shorthand', t => {
+    const fixture = `header{background:resemble-image(url("${image}")) no-repeat center / cover}`;
+    return postcss(plugin()).process(fixture).then((result) => {
+        // Check if the fallback gradient is appended at the end of the value
+        t.not(result.root.first.nodes[0].value.match(/linear-gradient\([^)]+\)$/), null);
+        return assertColourStops(t, fixture, 4);
+    });
+});
+
 test(
     'should error on 0',
     shouldThrow,
