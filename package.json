@@ -1,6 +1,6 @@
 {
   "name": "postcss-resemble-image",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Provide a gradient fallback for an image that loosely resembles the original.",
   "main": "dist/index.js",
   "scripts": {
