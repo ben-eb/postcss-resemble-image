@@ -39,6 +39,12 @@ function assertColourStops (t, fixture, expected, options) {
     });
 }
 
+function shouldNotHaveFunctionInOutput (t, fixture, expected, options) {
+    return postcss(plugin(options)).process(fixture).then((result) => {
+        t.is(result.root.first.nodes[0].value.indexOf('resemble-image'), -1);
+    });
+}
+
 function processCss (t, fixture, expected, options) {
     return postcss(plugin(options)).process(fixture).then(({css}) => {
         t.deepEqual(css, expected);
@@ -77,6 +83,13 @@ test(
     `header, footer{background:url("${image}")}`,
     4,
     {selectors: ['header']}
+);
+
+test(
+    'should output a value without the resemble-image() function wrapped around',
+    shouldNotHaveFunctionInOutput,
+    `header{background:resemble-image(url("${image}"))}`,
+    4
 );
 
 test(
@@ -151,6 +164,21 @@ test(
     `header{background:url("foo.jpg"), resemble-image(url("${image}"))}`,
     4
 );
+
+test('should handle background value shorthand',
+    assertColourStops,
+    `header{background:resemble-image(url("${image}")) no-repeat center / cover}`,
+    4
+);
+
+test('should handle background value shorthand', t => {
+    const fixture = `header{background:resemble-image(url("${image}")) no-repeat center / cover}`;
+    return postcss(plugin()).process(fixture).then((result) => {
+        // Check if the fallback gradient is appended at the end of the value
+        t.not(result.root.first.nodes[0].value.match(/linear-gradient\([^)]+\)$/), null);
+        return assertColourStops(t, fixture, 4);
+    });
+});
 
 test(
     'should error on 0',
