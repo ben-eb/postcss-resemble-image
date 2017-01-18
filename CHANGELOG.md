@@ -1,3 +1,9 @@
+# 2.1.1
+
+* Resolves an issue where the gradient fallback would be placed in the wrong
+  position for the `background` shorthand; now, it is appended to the value
+  (thanks to @diagramatics).
+
 # 2.1.0
 
 * Adds a `selectors` option which enables you to automatically add the gradients

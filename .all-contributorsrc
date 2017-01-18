@@ -28,6 +28,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "diagramatics",
+      "name": "Steven Sinatra",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5153378?v=3",
+      "profile": "http://diagramatics.me",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ]
 }
